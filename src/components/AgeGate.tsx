@@ -14,7 +14,6 @@ export function AgeGate() {
     } catch {
       next = "open";
     }
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setState(next);
   }, []);
 

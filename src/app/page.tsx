@@ -1,7 +1,9 @@
 import Link from "next/link";
-import { titles, byCollection, heroSlides, getTitle } from "@/lib/data";
+import { titles, byCollection, heroSlides, getTitle, topTen } from "@/lib/data";
 import { Hero } from "@/components/Hero";
 import { Row } from "@/components/Row";
+import { ContinueRow } from "@/components/ContinueRow";
+import { Top10Row } from "@/components/Top10Row";
 
 const studios = [
   "Atelier Kurai",
@@ -22,6 +24,7 @@ export default function HomePage() {
   const studioSpotlight = byCollection("Studio Spotlight");
   const directorsPick = byCollection("Director's Pick");
   const lateNight = byCollection("Late Night");
+  const ranking = topTen();
 
   return (
     <>
@@ -42,37 +45,44 @@ export default function HomePage() {
         </div>
       </section>
 
-      <Row
-        heading="Trending Now"
-        subheading="What members are watching tonight"
-        titles={[...trending, ...popular].slice(0, 8)}
-        href="/browse"
-      />
-      <Row
-        heading="New Releases"
-        subheading="Fresh this week, simulcast same-day"
-        titles={newReleases}
-        href="/browse"
-      />
-      <Row
-        heading="Popular This Week"
-        titles={[...popular, ...trending].slice(0, 8)}
-        href="/collections#popular-this-week"
-      />
-      <Row
-        heading="Studio Spotlight"
-        subheading="Atelier Kurai, in focus"
-        titles={[...studioSpotlight, ...lateNight].slice(0, 8)}
-        href="/collections#studio-spotlight"
-      />
-      <Row
-        heading="Director's Pick"
-        titles={[...directorsPick, ...lateNight].slice(0, 8)}
-        href="/collections#directors-pick"
-      />
+      <div className="space-y-14 py-10 sm:space-y-16">
+        <ContinueRow />
+
+        <Row
+          heading="Trending Now"
+          subheading="What members are watching tonight"
+          titles={[...trending, ...popular].slice(0, 8)}
+          href="/browse"
+        />
+
+        <Top10Row titles={ranking} />
+
+        <Row
+          heading="New Releases"
+          subheading="Fresh this week, simulcast same-day"
+          titles={newReleases}
+          href="/browse"
+        />
+        <Row
+          heading="Popular This Week"
+          titles={[...popular, ...trending].slice(0, 8)}
+          href="/collections#popular-this-week"
+        />
+        <Row
+          heading="Studio Spotlight"
+          subheading="Atelier Kurai, in focus"
+          titles={[...studioSpotlight, ...lateNight].slice(0, 8)}
+          href="/collections#studio-spotlight"
+        />
+        <Row
+          heading="Director's Pick"
+          titles={[...directorsPick, ...lateNight].slice(0, 8)}
+          href="/collections#directors-pick"
+        />
+      </div>
 
       {/* Genres strip */}
-      <section className="mx-auto mt-16 max-w-[1400px] px-5 sm:px-8">
+      <section className="mx-auto mt-8 max-w-[1500px] px-4 sm:px-6 lg:px-8">
         <h2 className="text-[1.4rem] font-bold tracking-tight text-[var(--fg-4)] sm:text-[1.6rem]">
           Browse by genre
         </h2>
@@ -83,7 +93,7 @@ export default function HomePage() {
           {Array.from(new Set(titles.flatMap((t) => t.tags))).map((tag) => (
             <Link
               key={tag}
-              href={`/browse?tag=${encodeURIComponent(tag)}`}
+              href={`/genres/${encodeURIComponent(tag.toLowerCase())}`}
               className="rounded-full bg-[var(--bg-1)] px-4 py-2 text-[0.92rem] font-medium text-[var(--fg-3)] hairline transition hover:bg-[var(--bg-2)] hover:text-[var(--brand)]"
             >
               {tag}
@@ -93,7 +103,7 @@ export default function HomePage() {
       </section>
 
       {/* CTA */}
-      <section className="mx-auto mt-20 max-w-[1400px] px-5 sm:px-8">
+      <section className="mx-auto mt-20 max-w-[1500px] px-4 sm:px-6 lg:px-8">
         <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[var(--brand)] via-[oklch(0.62_0.18_30)] to-[oklch(0.42_0.13_330)] p-10 sm:p-14">
           <div className="relative z-10 max-w-xl">
             <p className="text-[0.78rem] font-bold uppercase tracking-[0.22em] text-[oklch(0.20_0.02_30)]/85">
@@ -124,6 +134,8 @@ export default function HomePage() {
           <div aria-hidden className="absolute -bottom-20 right-1/4 h-72 w-72 rounded-full bg-[oklch(0.45_0.20_330)]/40 blur-3xl" />
         </div>
       </section>
+
+      <div className="h-20" />
     </>
   );
 }
