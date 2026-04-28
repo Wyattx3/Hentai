@@ -1,32 +1,24 @@
 import type { Metadata, Viewport } from "next";
-import { Bricolage_Grotesque, JetBrains_Mono } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { AgeGate } from "@/components/AgeGate";
 
-const bricolage = Bricolage_Grotesque({
-  variable: "--font-bricolage",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
   display: "swap",
-  axes: ["opsz", "wdth"],
-});
-
-const jetbrains = JetBrains_Mono({
-  variable: "--font-mono-jb",
-  subsets: ["latin"],
-  display: "swap",
-  weight: ["400", "500"],
 });
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://hentaiki.app"),
   title: {
-    default: "hentaiki, animation for the small hours",
+    default: "hentaiki — adult anime, streaming",
     template: "%s · hentaiki",
   },
   description:
-    "A small streaming room for adult animation, curated like a film series. Long evenings, low light, a short list of things worth your night.",
+    "hentaiki streams adult animation in HD. New episodes weekly, hand-picked simulcasts, full series, sub and dub.",
   applicationName: "hentaiki",
   authors: [{ name: "hentaiki" }],
   robots: { index: true, follow: true },
@@ -41,14 +33,11 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html
-      lang="en"
-      className={`${bricolage.variable} ${jetbrains.variable}`}
-    >
+    <html lang="en" className={inter.variable}>
       <body className="min-h-dvh flex flex-col">
         <a
           href="#main"
-          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:bg-[var(--ink-1)] focus:px-3 focus:py-2"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:bg-[var(--bg-1)] focus:px-3 focus:py-2"
         >
           Skip to content
         </a>

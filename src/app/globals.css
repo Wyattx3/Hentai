@@ -1,187 +1,244 @@
 @import "tailwindcss";
 
 /* ---------------------------------------------------------------
-   hentaiki — design tokens
-   Color strategy: Restrained — tinted near-black surface + one accent
-   Theme scene: an anime fan in a dim room at 11pm, eyes adjusted to
-   low light, looking for something tonight. Dark is the answer.
+   hentaiki — streaming-app theme
+   Dark surface + vivid orange brand accent. Built for catalog
+   browsing: rows of art, rotating hero, lots of motion.
    --------------------------------------------------------------- */
 
 :root {
-  /* Surfaces — every neutral tinted ~25° hue (red-orange ink) */
-  --ink-0: oklch(0.135 0.010 25);   /* page background */
-  --ink-1: oklch(0.165 0.010 25);   /* raised surface */
-  --ink-2: oklch(0.205 0.012 25);   /* elevated, hover */
-  --ink-3: oklch(0.265 0.014 25);   /* line, divider */
-  --ink-4: oklch(0.380 0.014 25);   /* muted text */
-  --ink-5: oklch(0.620 0.012 25);   /* secondary text */
-  --ink-6: oklch(0.860 0.008 25);   /* primary text */
-  --ink-7: oklch(0.965 0.005 25);   /* high-emphasis text */
+  /* Surfaces — deep neutrals tinted toward warm */
+  --bg-0: oklch(0.155 0.012 30);   /* page background */
+  --bg-1: oklch(0.195 0.014 30);   /* card / surface */
+  --bg-2: oklch(0.245 0.016 30);   /* hover, elevated */
+  --bg-3: oklch(0.310 0.018 30);   /* divider, line */
+  --fg-1: oklch(0.560 0.014 30);   /* tertiary text */
+  --fg-2: oklch(0.760 0.012 30);   /* secondary text */
+  --fg-3: oklch(0.940 0.008 30);   /* primary text */
+  --fg-4: oklch(0.985 0.004 30);   /* high-emphasis */
 
-  /* Single accent — anime-ink crimson, used <10% of any surface */
-  --accent: oklch(0.62 0.215 27);
-  --accent-press: oklch(0.55 0.205 27);
-  --accent-soft: oklch(0.62 0.215 27 / 0.16);
-  --accent-line: oklch(0.62 0.215 27 / 0.40);
+  /* Brand accent — vivid orange (Crunchyroll-adjacent, hue 50) */
+  --brand: oklch(0.72 0.182 52);
+  --brand-hot: oklch(0.78 0.196 48);   /* hover / glow */
+  --brand-press: oklch(0.64 0.176 50); /* active */
+  --brand-soft: oklch(0.72 0.182 52 / 0.18);
+  --brand-line: oklch(0.72 0.182 52 / 0.50);
 
-  /* Focus ring (a11y — never hides) */
-  --ring: oklch(0.78 0.18 27);
+  /* Secondary accent for badges (pink-magenta for NEW) */
+  --pink: oklch(0.70 0.215 358);
+  --pink-soft: oklch(0.70 0.215 358 / 0.18);
+
+  /* Focus ring */
+  --ring: oklch(0.82 0.16 52);
 
   /* Type stack */
-  --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
-  --font-body: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-mono-jb), ui-monospace, "SF Mono", monospace;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 
-  /* Easing — exponential out only, no bounce */
-  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  /* Easing */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 
   color-scheme: dark;
 }
 
 @theme inline {
-  --color-bg: var(--ink-0);
-  --color-surface: var(--ink-1);
-  --color-elevated: var(--ink-2);
-  --color-line: var(--ink-3);
-  --color-muted: var(--ink-4);
-  --color-secondary: var(--ink-5);
-  --color-fg: var(--ink-6);
-  --color-fg-strong: var(--ink-7);
-  --color-accent: var(--accent);
-  --color-ring: var(--ring);
-  --font-sans: var(--font-body);
-  --font-display: var(--font-display);
-  --font-mono: var(--font-mono);
+  --color-bg-0: var(--bg-0);
+  --color-bg-1: var(--bg-1);
+  --color-bg-2: var(--bg-2);
+  --color-bg-3: var(--bg-3);
+  --color-fg-1: var(--fg-1);
+  --color-fg-2: var(--fg-2);
+  --color-fg-3: var(--fg-3);
+  --color-fg-4: var(--fg-4);
+  --color-brand: var(--brand);
+  --color-brand-hot: var(--brand-hot);
+  --font-sans: var(--font-inter);
 }
 
-* {
-  border-color: var(--ink-3);
-}
-
-html {
-  background: var(--ink-0);
-  color: var(--ink-6);
-}
-
-body {
-  background: var(--ink-0);
-  color: var(--ink-6);
-  font-family: var(--font-body);
+html, body {
+  background: var(--bg-0);
+  color: var(--fg-3);
+  font-family: var(--font-sans);
   font-feature-settings: "ss01", "cv11";
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  /* Light type on dark needs more breathing room */
-  line-height: 1.55;
 }
 
 ::selection {
-  background: var(--accent-soft);
-  color: var(--ink-7);
+  background: var(--brand-soft);
+  color: var(--fg-4);
 }
 
-/* Focus — visible against any surface, ring + offset */
-:focus-visible {
+/* Focus ring — visible everywhere */
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
   outline: 2px solid var(--ring);
   outline-offset: 2px;
-  border-radius: 2px;
+  border-radius: 6px;
 }
 
-/* Display headings — Bricolage Grotesque opsz/wdth/wght.
-   `tt-` prefix to avoid collision with Tailwind's `h-*` height utilities. */
-.tt-display {
-  font-family: var(--font-display);
-  font-variation-settings: "opsz" 96, "wdth" 92, "wght" 540;
-  letter-spacing: -0.04em;
-  line-height: 0.92;
-}
-.tt-h1 {
-  font-variation-settings: "opsz" 64, "wdth" 96, "wght" 580;
-  letter-spacing: -0.035em;
-  line-height: 0.98;
-}
-.tt-h2 {
-  font-variation-settings: "opsz" 32, "wdth" 100, "wght" 580;
-  letter-spacing: -0.02em;
-  line-height: 1.05;
-}
-.tt-h3 {
-  font-variation-settings: "opsz" 24, "wdth" 100, "wght" 600;
-  letter-spacing: -0.012em;
-  line-height: 1.15;
-}
+/* Hide scrollbars on horizontal rails (rows still scroll) */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { scrollbar-width: none; }
 
-/* Mono caption — used for tags, runtimes, episode numbers */
-.t-mono {
-  font-family: var(--font-mono);
-  font-feature-settings: "ss02";
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-  font-size: 0.72rem;
-}
-
-/* Subtle film-grain on hero surfaces (purposeful, not glassmorphism) */
-.grain::before {
-  content: "";
+/* Ambient glow used behind hero / featured art */
+.glow {
   position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background-image: radial-gradient(oklch(1 0 0 / 0.018) 1px, transparent 1px);
-  background-size: 3px 3px;
-  mix-blend-mode: overlay;
-  opacity: 0.6;
-}
-
-/* Generative cover art — used in place of real imagery.
-   `:where()` keeps specificity at 0 so any Tailwind utility wins. */
-:where(.cover) {
-  isolation: isolate;
-  overflow: hidden;
+  inset: -40% -10% auto -10%;
+  height: 70%;
   background:
-    radial-gradient(120% 80% at var(--cx, 30%) var(--cy, 30%),
-      var(--c1, oklch(0.45 0.18 27)) 0%,
-      transparent 55%),
-    radial-gradient(80% 60% at var(--cx2, 80%) var(--cy2, 90%),
-      var(--c2, oklch(0.30 0.10 320)) 0%,
-      transparent 60%),
-    linear-gradient(160deg, var(--ink-2), var(--ink-1));
+    radial-gradient(50% 60% at 30% 40%, var(--brand-soft), transparent 70%),
+    radial-gradient(40% 60% at 80% 30%, oklch(0.55 0.20 320 / 0.18), transparent 70%);
+  filter: blur(30px);
+  pointer-events: none;
+  z-index: 0;
 }
-:where(.cover)::after {
-  content: "";
+
+/* Card — used for rows, watch surface */
+.card {
+  background: var(--bg-1);
+  border-radius: 14px;
+}
+
+/* Soft inner border that doesn't read as outlined card */
+.hairline {
+  box-shadow: inset 0 0 0 1px var(--bg-3);
+}
+
+/* Brand button */
+.btn-brand {
+  background: var(--brand);
+  color: oklch(0.20 0.02 30);
+  padding: 0.7rem 1.2rem;
+  border-radius: 999px;
+  font-weight: 700;
+  letter-spacing: -0.005em;
+  transition: background 200ms var(--ease-out), transform 200ms var(--ease-out);
+}
+.btn-brand:hover { background: var(--brand-hot); }
+.btn-brand:active { background: var(--brand-press); transform: translateY(1px); }
+
+/* Ghost button */
+.btn-ghost {
+  background: oklch(1 0 0 / 0.06);
+  color: var(--fg-3);
+  padding: 0.7rem 1.2rem;
+  border-radius: 999px;
+  font-weight: 600;
+  transition: background 200ms var(--ease-out);
+}
+.btn-ghost:hover { background: oklch(1 0 0 / 0.10); }
+
+/* Pill — used for tags, dub/sub badges */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  height: 1.5rem;
+  padding: 0 0.55rem;
+  border-radius: 999px;
+  background: oklch(0 0 0 / 0.45);
+  color: var(--fg-3);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  backdrop-filter: blur(4px);
+}
+.pill-brand {
+  background: var(--brand);
+  color: oklch(0.20 0.02 30);
+}
+.pill-pink {
+  background: var(--pink);
+  color: oklch(0.20 0.02 30);
+}
+
+/* Cover — uses picsum image; this layer just adds the gradient */
+:where(.cover-shade) {
   position: absolute;
   inset: 0;
-  background-image:
-    repeating-linear-gradient(
-      var(--lines, 90deg),
-      transparent 0,
-      transparent calc(var(--gap, 14px) - 1px),
-      oklch(1 0 0 / 0.045) calc(var(--gap, 14px) - 1px),
-      oklch(1 0 0 / 0.045) var(--gap, 14px)
+  background:
+    linear-gradient(
+      180deg,
+      oklch(0 0 0 / 0) 0%,
+      oklch(0 0 0 / 0) 40%,
+      oklch(0 0 0 / 0.55) 75%,
+      oklch(0 0 0 / 0.85) 100%
     );
-  mix-blend-mode: soft-light;
   pointer-events: none;
 }
 
-/* Marquee — used in landing strip */
+/* Hero overlay — heavier than cover-shade */
+:where(.hero-shade) {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      90deg,
+      oklch(0 0 0 / 0.85) 0%,
+      oklch(0 0 0 / 0.55) 30%,
+      oklch(0 0 0 / 0.10) 60%,
+      oklch(0 0 0 / 0) 80%
+    ),
+    linear-gradient(
+      0deg,
+      var(--bg-0) 0%,
+      oklch(0 0 0 / 0) 35%
+    );
+  pointer-events: none;
+}
+
+/* Marquee for studio strip */
 @keyframes marquee {
   from { transform: translate3d(0, 0, 0); }
   to   { transform: translate3d(-50%, 0, 0); }
 }
 .marquee {
-  animation: marquee 60s linear infinite;
-  will-change: transform;
+  animation: marquee 50s linear infinite;
 }
-
-/* Reveal — small, deliberate */
-@keyframes rise {
-  from { opacity: 0; transform: translate3d(0, 8px, 0); }
-  to   { opacity: 1; transform: translate3d(0, 0, 0); }
-}
-.rise { animation: rise 600ms var(--ease-out) both; }
-
-/* Reduce motion */
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation: none !important;
-    transition: none !important;
-  }
+  .marquee { animation: none; }
 }
+
+/* Card hover lift */
+.lift {
+  transition:
+    transform 360ms var(--ease-out),
+    box-shadow 360ms var(--ease-out);
+}
+.lift:hover {
+  transform: translateY(-4px) scale(1.025);
+  box-shadow: 0 22px 40px -16px oklch(0 0 0 / 0.6);
+}
+@media (prefers-reduced-motion: reduce) {
+  .lift:hover { transform: none; }
+}
+
+/* Glow pulse on hot CTA */
+@keyframes pulse-brand {
+  0%, 100% { box-shadow: 0 0 0 0 oklch(0.78 0.196 48 / 0.55); }
+  50%      { box-shadow: 0 0 0 14px oklch(0.78 0.196 48 / 0); }
+}
+.pulse-brand {
+  animation: pulse-brand 2.6s var(--ease-out-expo) infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .pulse-brand { animation: none; }
+}
+
+/* Hero crossfade */
+@keyframes hero-fade {
+  from { opacity: 0; transform: scale(1.04); }
+  to   { opacity: 1; transform: scale(1); }
+}
+.hero-fade { animation: hero-fade 900ms var(--ease-out-expo); }
+
+/* Reveal on mount */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.rise { animation: rise 700ms var(--ease-out-expo) both; }
+.rise-d-1 { animation-delay: 120ms; }
+.rise-d-2 { animation-delay: 220ms; }
+.rise-d-3 { animation-delay: 320ms; }

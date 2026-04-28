@@ -9,54 +9,36 @@ const nav = [
 
 export function SiteHeader() {
   return (
-    <header className="sticky top-0 z-30 border-b border-[var(--ink-3)]/70 bg-[var(--ink-0)]/85 backdrop-blur-md">
-      <div className="mx-auto flex h-14 max-w-[1320px] items-center gap-8 px-5 sm:px-8">
-        <Link
-          href="/"
-          aria-label="hentaiki home"
-          className="flex items-center gap-2 text-[var(--ink-7)]"
-        >
-          <Wordmark />
+    <header className="sticky top-0 z-40 border-b border-[var(--bg-3)]/70 bg-[var(--bg-0)]/80 backdrop-blur-md">
+      <div className="mx-auto flex h-16 max-w-[1400px] items-center gap-8 px-5 sm:px-8">
+        <Link href="/" aria-label="hentaiki home" className="shrink-0">
+          <Wordmark size={22} />
         </Link>
-
-        <nav aria-label="Primary" className="hidden md:block">
-          <ul className="flex items-center gap-7 text-[0.92rem] text-[var(--ink-5)]">
-            {nav.map((item) => (
-              <li key={item.href}>
-                <Link
-                  href={item.href}
-                  className="transition-colors hover:text-[var(--ink-7)]"
-                >
-                  {item.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
+        <nav aria-label="Primary" className="hidden items-center gap-1 md:flex">
+          {nav.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className="rounded-full px-3 py-1.5 text-[0.92rem] font-medium text-[var(--fg-2)] transition hover:bg-[var(--bg-2)] hover:text-[var(--fg-4)]"
+            >
+              {item.label}
+            </Link>
+          ))}
         </nav>
-
-        <div className="ml-auto flex items-center gap-3">
+        <div className="ml-auto flex items-center gap-2">
           <Link
             href="/search"
-            className="inline-flex h-9 items-center gap-2 rounded-full border border-[var(--ink-3)] px-3 text-[0.85rem] text-[var(--ink-5)] transition-colors hover:border-[var(--ink-4)] hover:text-[var(--ink-7)]"
             aria-label="Search the catalog"
+            className="flex h-10 items-center gap-2 rounded-full bg-[var(--bg-2)] px-3.5 text-[0.9rem] text-[var(--fg-2)] transition hover:bg-[var(--bg-3)] hover:text-[var(--fg-4)]"
           >
-            <svg
-              width="14"
-              height="14"
-              viewBox="0 0 14 14"
-              aria-hidden="true"
-              className="opacity-80"
-            >
-              <circle cx="6" cy="6" r="4.25" fill="none" stroke="currentColor" strokeWidth="1.2" />
-              <line x1="9.2" y1="9.2" x2="12.5" y2="12.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+              <circle cx="11" cy="11" r="7" />
+              <path d="m20 20-3-3" />
             </svg>
             <span className="hidden sm:inline">Search</span>
           </Link>
-          <Link
-            href="/browse"
-            className="hidden sm:inline-flex h-9 items-center rounded-full bg-[var(--ink-7)] px-4 text-[0.85rem] font-medium text-[var(--ink-0)] transition-transform hover:-translate-y-px"
-          >
-            Start watching
+          <Link href="/browse" className="btn-brand text-[0.92rem]">
+            Watch now
           </Link>
         </div>
       </div>

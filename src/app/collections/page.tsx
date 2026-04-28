@@ -3,70 +3,66 @@ import { TitleCard } from "@/components/TitleCard";
 
 export const metadata = {
   title: "Collections",
-  description: "Six rooms, one season at a time.",
+  description: "Curated rooms: trending, new releases, and director picks.",
 };
 
 const blurbs: Record<string, string> = {
-  "Late Night": "Things to put on after the dishes are done.",
-  "Studio Spotlight": "A working room of the studios we keep coming back to.",
-  "Slow Burn": "Long evenings, the camera holding its breath.",
-  "Underground": "Smaller releases, weirder shapes, the corners.",
-  "New & Notable": "Added in the last thirty days.",
-  "Director's Pick": "A short shelf curated by our editor in chief.",
+  "Trending Now": "What everyone's watching this week.",
+  "New Releases": "Out this month. Simulcasts same-day.",
+  "Popular This Week": "Top-rated and most-watched right now.",
+  "Late Night": "Slow stories for the small hours.",
+  "Studio Spotlight": "One studio at a time, in focus.",
+  "Director's Pick": "Hand-selected by the editorial team.",
 };
+
+function slug(s: string) {
+  return s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+}
 
 export default function CollectionsPage() {
   return (
-    <div className="mx-auto max-w-[1320px] px-5 sm:px-8">
-      <section className="border-b border-[var(--ink-3)] py-14">
-        <p className="t-mono text-[var(--ink-4)]">Collections</p>
-        <h1 className="tt-h1 mt-3 text-[clamp(2.4rem,1.6rem+3vw,4.2rem)] text-[var(--ink-7)]">
-          Six rooms, one season at a time.
+    <>
+      <section className="mx-auto max-w-[1400px] px-5 pt-12 sm:px-8 sm:pt-16">
+        <p className="text-[0.78rem] font-semibold uppercase tracking-[0.18em] text-[var(--brand)]">
+          Collections
+        </p>
+        <h1 className="mt-2 text-[clamp(2.2rem,1.5rem+2.6vw,3.6rem)] font-extrabold tracking-tight text-[var(--fg-4)]">
+          Six rooms, hand-picked.
         </h1>
-        <p className="mt-4 max-w-[58ch] text-[1.05rem] text-[var(--ink-5)]">
-          {"The catalog is organised the way we'd organise a film series at a small theatre: a few rooms, refreshed once a month."}
+        <p className="mt-2 max-w-[60ch] text-[1rem] text-[var(--fg-2)]">
+          Every title in the catalog lives in one curated room. New rooms open every season.
         </p>
       </section>
 
-      {allCollections.map((c, i) => {
-        const items = byCollection(c);
-        const id = c.toLowerCase().replace(/\s+/g, "-");
+      {allCollections.map((name, idx) => {
+        const list = byCollection(name);
+        if (list.length === 0) return null;
         return (
           <section
-            key={c}
-            id={id}
-            className={[
-              "py-16",
-              i !== allCollections.length - 1 ? "border-b border-[var(--ink-3)]" : "",
-            ].join(" ")}
+            id={slug(name)}
+            key={name}
+            className="mx-auto max-w-[1400px] px-5 pt-14 sm:px-8"
           >
-            <header className="mb-8 flex items-end justify-between gap-6">
+            <header className="mb-5 flex flex-wrap items-end justify-between gap-3">
               <div>
-                <p className="t-mono text-[var(--accent)]">
-                  Collection {String(i + 1).padStart(2, "0")}
+                <p className="text-[0.78rem] font-semibold uppercase tracking-[0.18em] text-[var(--fg-1)]">
+                  {String(idx + 1).padStart(2, "0")}
                 </p>
-                <h2
-                  className="mt-2 text-[clamp(1.8rem,1.3rem+1.8vw,2.8rem)] text-[var(--ink-7)]"
-                  style={{ fontVariationSettings: '"opsz" 48, "wdth" 96, "wght" 580', letterSpacing: "-0.022em" }}
-                >
-                  {c}
+                <h2 className="mt-1 text-[clamp(1.6rem,1.2rem+1.2vw,2.2rem)] font-bold tracking-tight text-[var(--fg-4)]">
+                  {name}
                 </h2>
-                <p className="mt-3 max-w-[52ch] text-[1rem] text-[var(--ink-5)]">
-                  {blurbs[c]}
-                </p>
+                <p className="mt-1 text-[0.94rem] text-[var(--fg-2)]">{blurbs[name]}</p>
               </div>
-              <span className="t-mono hidden text-[var(--ink-4)] sm:inline">
-                {items.length} titles
-              </span>
+              <span className="text-[0.86rem] text-[var(--fg-1)]">{list.length} titles</span>
             </header>
-            <div className="grid grid-cols-2 gap-x-5 gap-y-10 md:grid-cols-3 lg:grid-cols-4">
-              {items.map((t) => (
+            <div className="grid grid-cols-2 gap-x-4 gap-y-10 sm:grid-cols-3 lg:grid-cols-4">
+              {list.map((t) => (
                 <TitleCard key={t.slug} title={t} />
               ))}
             </div>
           </section>
         );
       })}
-    </div>
+    </>
   );
 }

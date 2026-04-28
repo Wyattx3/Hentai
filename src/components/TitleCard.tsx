@@ -1,52 +1,71 @@
 import Link from "next/link";
 import type { Title } from "@/lib/data";
 import { Cover } from "./Cover";
+import { Stars } from "./Stars";
 
 export function TitleCard({
   title,
   size = "md",
+  priority = false,
 }: {
   title: Title;
   size?: "sm" | "md" | "lg";
+  priority?: boolean;
 }) {
-  const aspect =
+  const widthClass =
     size === "lg"
-      ? "aspect-[3/4]"
+      ? "w-[260px] sm:w-[300px]"
       : size === "sm"
-        ? "aspect-[4/5]"
-        : "aspect-[3/4]";
+        ? "w-[160px] sm:w-[180px]"
+        : "w-[200px] sm:w-[220px]";
 
   return (
     <Link
       href={`/watch/${title.slug}`}
-      className="group block focus:outline-none"
+      className={`group block ${widthClass} shrink-0 focus:outline-none`}
       aria-label={`${title.name}, ${title.studio}, ${title.year}`}
     >
-      <div className={`relative ${aspect} overflow-hidden`}>
+      <div className="lift relative aspect-[2/3] overflow-hidden rounded-xl bg-[var(--bg-1)] hairline">
         <Cover
           title={title}
-          className="absolute inset-0 transition-transform duration-700 ease-out group-hover:scale-[1.025]"
+          width={500}
+          height={750}
+          priority={priority}
+          className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-[1.06]"
         />
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-[var(--ink-0)]/85 to-transparent" />
-        <div className="absolute left-3 right-3 top-3 flex items-center justify-between">
-          <span className="t-mono text-[var(--ink-7)]">{title.rating}</span>
-          <span className="t-mono text-[var(--ink-6)]">
-            {title.episodes} EP
+        <div className="cover-shade" />
+
+        {/* Badges */}
+        <div className="absolute left-2.5 right-2.5 top-2.5 flex flex-wrap items-center gap-1.5">
+          {title.isNew && <span className="pill pill-pink">NEW</span>}
+          {title.isHot && <span className="pill pill-brand">HOT</span>}
+          <span className="pill ml-auto">{title.rating}</span>
+        </div>
+
+        {/* Hover-only play scrim */}
+        <div className="pointer-events-none absolute inset-0 flex items-end justify-center pb-5 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+          <span className="flex h-11 w-11 items-center justify-center rounded-full bg-[var(--brand)] text-[var(--bg-0)] shadow-lg shadow-black/40">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+              <path d="M8 5v14l11-7z" />
+            </svg>
           </span>
         </div>
-        <div className="absolute inset-x-3 bottom-3">
-          <p className="t-mono mb-1 text-[var(--ink-5)]">{title.studio}</p>
-          <h3
-            className="tt-h3 text-[clamp(1rem,0.85rem+0.6vw,1.18rem)] text-[var(--ink-7)]"
-            style={{ fontVariationSettings: '"opsz" 24, "wdth" 96, "wght" 600' }}
-          >
-            {title.name}
-          </h3>
-        </div>
       </div>
-      <div className="mt-3 flex items-center justify-between text-[0.82rem] text-[var(--ink-5)]">
-        <span>{title.year}</span>
-        <span className="t-mono">{title.runtime}</span>
+
+      <div className="mt-3 px-0.5">
+        <h3 className="line-clamp-1 text-[0.98rem] font-semibold text-[var(--fg-3)] transition group-hover:text-[var(--brand)]">
+          {title.name}
+        </h3>
+        <div className="mt-1 flex items-center justify-between text-[0.8rem] text-[var(--fg-1)]">
+          <span className="flex items-center gap-1.5">
+            <Stars score={title.score} />
+            <span>{title.score.toFixed(1)}</span>
+          </span>
+          <span>{title.episodes} ep</span>
+        </div>
+        <p className="mt-0.5 line-clamp-1 text-[0.78rem] text-[var(--fg-1)]">
+          {title.studio} · {title.year}
+        </p>
       </div>
     </Link>
   );

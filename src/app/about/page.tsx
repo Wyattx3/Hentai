@@ -1,122 +1,93 @@
 import Link from "next/link";
 
 export const metadata = {
-  title: "About",
-  description: "What we are, who picks the catalog, and the fine print.",
+  title: "About hentaiki",
+  description:
+    "What hentaiki is, who it's for, and how the catalog gets built each season.",
 };
 
 export default function AboutPage() {
   return (
-    <article className="mx-auto max-w-[820px] px-5 pb-24 pt-16 sm:px-8">
-      <p className="t-mono text-[var(--accent)]">About</p>
-      <h1 className="tt-h1 mt-3 text-[clamp(2.4rem,1.6rem+3vw,4.2rem)] text-[var(--ink-7)]">
-        A small streaming room, run by a small editorial staff.
-      </h1>
-
-      <section className="mt-12 space-y-5 text-[1.08rem] leading-relaxed text-[var(--ink-6)]">
-        <p>
-          hentaiki is a members-only streaming service for adult animation. We
-          are not a tube site. We do not show ads, sell data, or run a
-          recommendation algorithm. There is no infinite scroll. Six dollars a
-          month, six new titles a month, twelve hours of programming on the
-          shelf at any time.
+    <>
+      <section className="mx-auto max-w-[1100px] px-5 pt-14 sm:px-8 sm:pt-20">
+        <p className="text-[0.78rem] font-semibold uppercase tracking-[0.18em] text-[var(--brand)]">
+          About
         </p>
-        <p>
-          The catalog is curated by a working editorial staff of three: an
-          editor in chief in Tokyo, a programmer in Lisbon, and a contributing
-          writer in Mexico City. Every title is watched in full before it is
-          added. The shelf is small on purpose. We would rather you find one
-          thing tonight than scroll past forty.
+        <h1 className="mt-3 text-[clamp(2.4rem,1.6rem+3vw,4.4rem)] font-extrabold leading-[1] tracking-tight text-[var(--fg-4)]">
+          Adult animation, streamed in HD.
+        </h1>
+        <p className="mt-5 max-w-[64ch] text-[1.1rem] leading-relaxed text-[var(--fg-2)]">
+          hentaiki is a streaming home for adult animation. Sub and dub, full series,
+          new episodes every Friday, simulcast titles same-day. Members only, eighteen
+          and over.
         </p>
+        <div className="mt-8 flex flex-wrap gap-3">
+          <Link href="/browse" className="btn-brand text-[0.98rem]">Start watching</Link>
+          <Link href="/collections" className="btn-ghost text-[0.96rem]">See collections</Link>
+        </div>
       </section>
 
-      <section id="editorial" className="mt-16">
-        <p className="t-mono text-[var(--ink-4)]">Editorial</p>
-        <h2 className="tt-h2 mt-3 text-[clamp(1.6rem,1.2rem+1.4vw,2.2rem)] text-[var(--ink-7)]">
-          What we look for.
+      <section className="mx-auto mt-20 grid max-w-[1100px] grid-cols-1 gap-8 px-5 sm:grid-cols-3 sm:px-8">
+        {[
+          {
+            head: "HD, on every device",
+            body: "Stream up to 1080p on phone, tablet, browser, and TV. Resume on any device. Offline downloads on the apps.",
+          },
+          {
+            head: "Simulcast same-day",
+            body: "New episodes from partner studios stream the day they air, not weeks later. Subbed first, dubbed within the week.",
+          },
+          {
+            head: "No ads, ever",
+            body: "Membership is six dollars a month. The product is the catalog, not your attention. Cancel any month.",
+          },
+        ].map((c) => (
+          <div key={c.head} className="card hairline p-6">
+            <h3 className="text-[1.05rem] font-bold text-[var(--fg-4)]">{c.head}</h3>
+            <p className="mt-2 text-[0.95rem] leading-relaxed text-[var(--fg-2)]">
+              {c.body}
+            </p>
+          </div>
+        ))}
+      </section>
+
+      <section className="mx-auto mt-20 max-w-[1100px] px-5 sm:px-8">
+        <h2 className="text-[clamp(1.6rem,1.2rem+1.4vw,2.2rem)] font-bold tracking-tight text-[var(--fg-4)]">
+          How the catalog gets built.
         </h2>
-        <ol className="mt-6 space-y-7">
-          {[
-            {
-              k: "01",
-              t: "A point of view.",
-              d: "Animation as authored work, not assembly. We index for direction, restraint, and a willingness to hold a frame.",
-            },
-            {
-              k: "02",
-              t: "Adult, not adolescent.",
-              d: "Adult themes, adult pacing, adult viewers. Eighteen and over, on the shelf and on the screen.",
-            },
-            {
-              k: "03",
-              t: "Studios over scenes.",
-              d: "We follow studios for years, not single titles. Six rotating studios on the shelf at a time.",
-            },
-          ].map((p) => (
-            <li
-              key={p.k}
-              className="grid grid-cols-[3rem_1fr] gap-5 border-t border-[var(--ink-3)] pt-5"
-            >
-              <span className="t-mono text-[var(--ink-4)]">{p.k}</span>
-              <div>
-                <h3
-                  className="text-[1.18rem] text-[var(--ink-7)]"
-                  style={{ fontVariationSettings: '"opsz" 24, "wdth" 100, "wght" 580' }}
-                >
-                  {p.t}
-                </h3>
-                <p className="mt-2 text-[var(--ink-5)]">{p.d}</p>
-              </div>
-            </li>
-          ))}
-        </ol>
+        <div className="mt-6 grid gap-6 md:grid-cols-2">
+          <p className="text-[1rem] leading-relaxed text-[var(--fg-2)]">
+            Every season a small editorial team watches a few hundred new releases and
+            picks roughly forty for the catalog. Studios in rotation: Atelier Kurai,
+            Hoshigumi, Studio Velho, Yatagarasu, Yukimura Pictures, Saudade Films.
+          </p>
+          <p className="text-[1rem] leading-relaxed text-[var(--fg-2)]">
+            Titles come and go. Member requests open the first week of each month at
+            requests@hentaiki.app. Submission queries from rights holders go to
+            licensing@hentaiki.app.
+          </p>
+        </div>
       </section>
 
-      <section id="contact" className="mt-16">
-        <p className="t-mono text-[var(--ink-4)]">Contact</p>
-        <p className="mt-3 text-[1.08rem] text-[var(--ink-6)]">
-          Press, studios, and corrections:{" "}
-          <a
-            href="mailto:editorial@hentaiki.app"
-            className="text-[var(--ink-7)] underline decoration-[var(--accent)] decoration-2 underline-offset-4"
-          >
-            editorial@hentaiki.app
-          </a>
-        </p>
+      <section className="mx-auto mt-20 max-w-[1100px] px-5 sm:px-8">
+        <h2 className="text-[clamp(1.6rem,1.2rem+1.4vw,2.2rem)] font-bold tracking-tight text-[var(--fg-4)]">
+          Fine print.
+        </h2>
+        <ul className="mt-5 space-y-3 text-[0.96rem] leading-relaxed text-[var(--fg-2)]">
+          <li>
+            Eighteen-and-over only. We use a single age check on first visit and a
+            verifier-of-record at signup. No ID copies are stored.
+          </li>
+          <li>
+            We do not sell, rent, or barter watch history. We do not run third-party ad
+            scripts. Telemetry is product-only and anonymized.
+          </li>
+          <li>
+            Takedowns and rights questions: legal@hentaiki.app. We answer within five
+            business days.
+          </li>
+        </ul>
       </section>
-
-      <section id="terms" className="mt-16 space-y-4 text-[var(--ink-5)]">
-        <p className="t-mono text-[var(--ink-4)]">Fine print</p>
-        <p>
-          By using hentaiki you confirm that you are at least eighteen years
-          old and that adult content is legal where you live. We do not host
-          content depicting anyone under eighteen, real or drawn.
-        </p>
-        <p id="privacy">
-          We do not sell or share data with third parties. The only personal
-          information we store is the email address used for billing, kept for
-          the duration of the subscription.
-        </p>
-        <p id="takedown">
-          For takedown requests covering material you hold rights to, write to{" "}
-          <a
-            href="mailto:legal@hentaiki.app"
-            className="text-[var(--ink-7)] underline decoration-[var(--accent)] decoration-2 underline-offset-4"
-          >
-            legal@hentaiki.app
-          </a>
-          . We aim to respond inside three business days.
-        </p>
-      </section>
-
-      <div className="mt-16 border-t border-[var(--ink-3)] pt-8">
-        <Link
-          href="/browse"
-          className="inline-flex h-11 items-center rounded-full bg-[var(--ink-7)] px-6 text-[0.95rem] font-medium text-[var(--ink-0)]"
-        >
-          Open the catalog
-        </Link>
-      </div>
-    </article>
+    </>
   );
 }

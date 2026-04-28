@@ -1,34 +1,15 @@
-/**
- * hentaiki wordmark.
- * Bricolage Grotesque, condensed width, with a kerned-tight stop and a
- * single accent dot. Single solid color (no gradient text).
- */
-export function Wordmark({ size = 18 }: { size?: number }) {
+export function Wordmark({ size = 22 }: { size?: number }) {
   return (
     <span
-      style={{
-        fontFamily: "var(--font-display)",
-        fontVariationSettings: '"opsz" 32, "wdth" 88, "wght" 620',
-        letterSpacing: "-0.025em",
-        fontSize: size,
-        lineHeight: 1,
-        display: "inline-flex",
-        alignItems: "baseline",
-        gap: "0.06em",
-        color: "var(--ink-7)",
-      }}
+      className="inline-flex items-baseline gap-[3px]"
+      style={{ fontSize: size, fontWeight: 800, letterSpacing: "-0.02em" }}
     >
-      hentaiki
+      <span className="text-[var(--fg-4)]">hentai</span>
+      <span className="text-[var(--brand)]">ki</span>
       <span
-        aria-hidden="true"
-        style={{
-          width: "0.32em",
-          height: "0.32em",
-          borderRadius: "999px",
-          background: "var(--accent)",
-          alignSelf: "center",
-          marginLeft: "0.08em",
-        }}
+        aria-hidden
+        className="ml-[1px] inline-block rounded-full bg-[var(--brand)]"
+        style={{ height: size * 0.18, width: size * 0.18 }}
       />
     </span>
   );

@@ -5,9 +5,7 @@ import { useEffect, useState } from "react";
 const KEY = "hentaiki:age-confirmed";
 
 export function AgeGate() {
-  const [state, setState] = useState<"loading" | "open" | "closed">(
-    "loading"
-  );
+  const [state, setState] = useState<"loading" | "open" | "closed">("loading");
 
   useEffect(() => {
     let next: "open" | "closed";
@@ -27,46 +25,41 @@ export function AgeGate() {
       role="dialog"
       aria-modal="true"
       aria-labelledby="age-gate-title"
-      className="fixed inset-0 z-50 flex items-end justify-center bg-[var(--ink-0)]/80 p-0 backdrop-blur-sm sm:items-center sm:p-6"
+      className="fixed inset-0 z-[60] flex items-end justify-center bg-black/85 p-0 backdrop-blur-md sm:items-center sm:p-6"
     >
-      <div className="relative w-full max-w-[520px] overflow-hidden border border-[var(--ink-3)] bg-[var(--ink-1)] sm:rounded-md">
-        <div className="grain pointer-events-none" aria-hidden />
+      <div className="relative w-full max-w-[520px] overflow-hidden rounded-t-2xl bg-[var(--bg-1)] hairline sm:rounded-2xl">
         <div className="px-7 pt-7">
-          <p className="t-mono text-[var(--accent)]">Members only · 18+</p>
+          <p className="text-[0.78rem] font-semibold uppercase tracking-[0.18em] text-[var(--brand)]">
+            Members only · 18+
+          </p>
           <h2
             id="age-gate-title"
-            className="tt-h2 mt-3 max-w-[18ch] text-[clamp(1.6rem,1.2rem+1.6vw,2.1rem)] text-[var(--ink-7)]"
+            className="mt-3 text-[clamp(1.6rem,1.2rem+1.6vw,2.1rem)] font-extrabold leading-tight tracking-tight text-[var(--fg-4)]"
           >
-            Are you old enough to be here, and do you want to be here?
+            Are you eighteen or older?
           </h2>
-          <p className="mt-3 max-w-[44ch] text-[0.95rem] text-[var(--ink-5)]">
-            hentaiki is an adult-animation streaming room. Continuing means you
-            are at least eighteen, that adult content is legal where you live,
-            and that you would like to see it.
+          <p className="mt-3 max-w-[48ch] text-[0.96rem] leading-relaxed text-[var(--fg-2)]">
+            hentaiki streams adult animation. Continuing confirms you are at
+            least eighteen and that adult content is legal where you live.
           </p>
         </div>
-
-        <div className="mt-7 grid grid-cols-1 gap-px bg-[var(--ink-3)] sm:grid-cols-[1fr_auto]">
+        <div className="mt-7 flex flex-col gap-2 px-7 pb-7 sm:flex-row">
           <button
             type="button"
             onClick={() => {
-              window.location.href = "https://www.google.com";
+              try { window.localStorage.setItem(KEY, "1"); } catch {}
+              setState("closed");
             }}
-            className="bg-[var(--ink-1)] px-7 py-4 text-left text-[0.95rem] text-[var(--ink-5)] transition-colors hover:bg-[var(--ink-2)] hover:text-[var(--ink-7)]"
+            className="btn-brand pulse-brand text-[0.96rem]"
           >
-            Take me somewhere else
+            Yes, I&apos;m 18+. Enter.
           </button>
           <button
             type="button"
-            onClick={() => {
-              try {
-                window.localStorage.setItem(KEY, "1");
-              } catch {}
-              setState("closed");
-            }}
-            className="bg-[var(--accent)] px-7 py-4 text-[0.95rem] font-medium text-[var(--ink-0)] transition-colors hover:bg-[var(--accent-press)]"
+            onClick={() => { window.location.href = "https://www.google.com"; }}
+            className="btn-ghost text-[0.96rem]"
           >
-            {"I'm 18+. Continue."}
+            Take me somewhere else
           </button>
         </div>
       </div>

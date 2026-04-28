@@ -1,37 +1,37 @@
+import Image from "next/image";
 import type { Title } from "@/lib/data";
 
 /**
- * Generative cover art. No real imagery — each title gets a deterministic
- * gradient + line pattern derived from its hue tokens. Keeps the catalog
- * visually distinct without leaning on stock or AI imagery.
+ * Title artwork. Uses deterministic placeholder photos from picsum.photos
+ * indexed by `title.imageId` so each title has its own art card without
+ * shipping any real licensed imagery in the prototype.
  */
 export function Cover({
   title,
+  width = 480,
+  height = 720,
+  priority = false,
   className,
-  style,
+  sizes = "(min-width:1280px) 240px, (min-width:768px) 25vw, 50vw",
 }: {
   title: Title;
+  width?: number;
+  height?: number;
+  priority?: boolean;
   className?: string;
-  style?: React.CSSProperties;
+  sizes?: string;
 }) {
+  const src = `https://picsum.photos/id/${title.imageId}/${width}/${height}`;
   return (
-    <div
-      className={`cover ${className ?? ""}`}
-      style={
-        {
-          "--c1": `oklch(0.45 0.18 ${title.hue})`,
-          "--c2": `oklch(0.30 0.14 ${title.hue2})`,
-          "--cx": `${(title.hue % 60) + 10}%`,
-          "--cy": `${(title.hue2 % 50) + 20}%`,
-          "--cx2": `${(title.hue * 2) % 90}%`,
-          "--cy2": `${(title.hue2 * 1.4) % 80}%`,
-          "--lines": title.lines,
-          "--gap": title.gap,
-          ...style,
-        } as React.CSSProperties
-      }
-      role="img"
-      aria-label={`${title.name} cover art`}
+    <Image
+      src={src}
+      alt={`${title.name} key art`}
+      width={width}
+      height={height}
+      priority={priority}
+      sizes={sizes}
+      className={className}
+      unoptimized
     />
   );
 }
