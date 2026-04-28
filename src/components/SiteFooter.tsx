@@ -25,17 +25,18 @@ export function SiteFooter() {
             title="hentaiki"
             items={[
               { href: "/about", label: "About" },
-              { href: "#", label: "Careers" },
-              { href: "#", label: "Press" },
+              { href: "/careers", label: "Careers" },
+              { href: "/press", label: "Press" },
             ]}
           />
           <FooterCol
             title="Help"
             items={[
-              { href: "#", label: "Account" },
-              { href: "#", label: "Devices" },
-              { href: "#", label: "Privacy" },
-              { href: "#", label: "Terms" },
+              { href: "/account", label: "Account" },
+              { href: "/help", label: "Help center" },
+              { href: "/settings", label: "Settings" },
+              { href: "/privacy", label: "Privacy" },
+              { href: "/terms", label: "Terms" },
             ]}
           />
         </div>

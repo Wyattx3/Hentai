@@ -124,8 +124,8 @@ export function SiteHeader() {
             <span className="hidden sm:inline">Search</span>
           </Link>
 
-          <button
-            type="button"
+          <Link
+            href="/notifications"
             aria-label="Notifications"
             className="relative hidden h-10 w-10 items-center justify-center rounded-full bg-[var(--bg-2)]/70 text-[var(--fg-2)] transition hover:bg-[var(--bg-3)] hover:text-[var(--fg-4)] sm:inline-flex"
           >
@@ -134,7 +134,7 @@ export function SiteHeader() {
               <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
             </svg>
             <span aria-hidden className="absolute right-2 top-2 h-2 w-2 rounded-full bg-[var(--brand)]" />
-          </button>
+          </Link>
 
           <Link href="/browse" className="btn-brand hidden text-[0.92rem] sm:inline-flex">
             Watch now
@@ -173,10 +173,11 @@ export function SiteHeader() {
                 </div>
                 <div className="py-1.5">
                   {[
-                    { label: "Profile", href: "/about" },
+                    { label: "Profile", href: "/account" },
                     { label: "My List", href: "/my-list" },
-                    { label: "Settings", href: "/about" },
-                    { label: "Help center", href: "/about" },
+                    { label: "Notifications", href: "/notifications" },
+                    { label: "Settings", href: "/settings" },
+                    { label: "Help center", href: "/help" },
                   ].map((it) => (
                     <Link
                       key={it.label}
