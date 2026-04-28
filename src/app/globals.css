@@ -1,0 +1,187 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------
+   hentaiki — design tokens
+   Color strategy: Restrained — tinted near-black surface + one accent
+   Theme scene: an anime fan in a dim room at 11pm, eyes adjusted to
+   low light, looking for something tonight. Dark is the answer.
+   --------------------------------------------------------------- */
+
+:root {
+  /* Surfaces — every neutral tinted ~25° hue (red-orange ink) */
+  --ink-0: oklch(0.135 0.010 25);   /* page background */
+  --ink-1: oklch(0.165 0.010 25);   /* raised surface */
+  --ink-2: oklch(0.205 0.012 25);   /* elevated, hover */
+  --ink-3: oklch(0.265 0.014 25);   /* line, divider */
+  --ink-4: oklch(0.380 0.014 25);   /* muted text */
+  --ink-5: oklch(0.620 0.012 25);   /* secondary text */
+  --ink-6: oklch(0.860 0.008 25);   /* primary text */
+  --ink-7: oklch(0.965 0.005 25);   /* high-emphasis text */
+
+  /* Single accent — anime-ink crimson, used <10% of any surface */
+  --accent: oklch(0.62 0.215 27);
+  --accent-press: oklch(0.55 0.205 27);
+  --accent-soft: oklch(0.62 0.215 27 / 0.16);
+  --accent-line: oklch(0.62 0.215 27 / 0.40);
+
+  /* Focus ring (a11y — never hides) */
+  --ring: oklch(0.78 0.18 27);
+
+  /* Type stack */
+  --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
+  --font-body: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-mono-jb), ui-monospace, "SF Mono", monospace;
+
+  /* Easing — exponential out only, no bounce */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-bg: var(--ink-0);
+  --color-surface: var(--ink-1);
+  --color-elevated: var(--ink-2);
+  --color-line: var(--ink-3);
+  --color-muted: var(--ink-4);
+  --color-secondary: var(--ink-5);
+  --color-fg: var(--ink-6);
+  --color-fg-strong: var(--ink-7);
+  --color-accent: var(--accent);
+  --color-ring: var(--ring);
+  --font-sans: var(--font-body);
+  --font-display: var(--font-display);
+  --font-mono: var(--font-mono);
+}
+
+* {
+  border-color: var(--ink-3);
+}
+
+html {
+  background: var(--ink-0);
+  color: var(--ink-6);
+}
+
+body {
+  background: var(--ink-0);
+  color: var(--ink-6);
+  font-family: var(--font-body);
+  font-feature-settings: "ss01", "cv11";
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  /* Light type on dark needs more breathing room */
+  line-height: 1.55;
+}
+
+::selection {
+  background: var(--accent-soft);
+  color: var(--ink-7);
+}
+
+/* Focus — visible against any surface, ring + offset */
+:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Display headings — Bricolage Grotesque opsz/wdth/wght.
+   `tt-` prefix to avoid collision with Tailwind's `h-*` height utilities. */
+.tt-display {
+  font-family: var(--font-display);
+  font-variation-settings: "opsz" 96, "wdth" 92, "wght" 540;
+  letter-spacing: -0.04em;
+  line-height: 0.92;
+}
+.tt-h1 {
+  font-variation-settings: "opsz" 64, "wdth" 96, "wght" 580;
+  letter-spacing: -0.035em;
+  line-height: 0.98;
+}
+.tt-h2 {
+  font-variation-settings: "opsz" 32, "wdth" 100, "wght" 580;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+}
+.tt-h3 {
+  font-variation-settings: "opsz" 24, "wdth" 100, "wght" 600;
+  letter-spacing: -0.012em;
+  line-height: 1.15;
+}
+
+/* Mono caption — used for tags, runtimes, episode numbers */
+.t-mono {
+  font-family: var(--font-mono);
+  font-feature-settings: "ss02";
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+}
+
+/* Subtle film-grain on hero surfaces (purposeful, not glassmorphism) */
+.grain::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: radial-gradient(oklch(1 0 0 / 0.018) 1px, transparent 1px);
+  background-size: 3px 3px;
+  mix-blend-mode: overlay;
+  opacity: 0.6;
+}
+
+/* Generative cover art — used in place of real imagery.
+   `:where()` keeps specificity at 0 so any Tailwind utility wins. */
+:where(.cover) {
+  isolation: isolate;
+  overflow: hidden;
+  background:
+    radial-gradient(120% 80% at var(--cx, 30%) var(--cy, 30%),
+      var(--c1, oklch(0.45 0.18 27)) 0%,
+      transparent 55%),
+    radial-gradient(80% 60% at var(--cx2, 80%) var(--cy2, 90%),
+      var(--c2, oklch(0.30 0.10 320)) 0%,
+      transparent 60%),
+    linear-gradient(160deg, var(--ink-2), var(--ink-1));
+}
+:where(.cover)::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(
+      var(--lines, 90deg),
+      transparent 0,
+      transparent calc(var(--gap, 14px) - 1px),
+      oklch(1 0 0 / 0.045) calc(var(--gap, 14px) - 1px),
+      oklch(1 0 0 / 0.045) var(--gap, 14px)
+    );
+  mix-blend-mode: soft-light;
+  pointer-events: none;
+}
+
+/* Marquee — used in landing strip */
+@keyframes marquee {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-50%, 0, 0); }
+}
+.marquee {
+  animation: marquee 60s linear infinite;
+  will-change: transform;
+}
+
+/* Reveal — small, deliberate */
+@keyframes rise {
+  from { opacity: 0; transform: translate3d(0, 8px, 0); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+.rise { animation: rise 600ms var(--ease-out) both; }
+
+/* Reduce motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
