@@ -1,11 +1,26 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import { useMyList } from "@/lib/storage";
+import { useAuth } from "@/lib/auth";
 
 export function TitleActions({ slug }: { slug: string }) {
   const { has, toggle } = useMyList();
+  const { user, ready } = useAuth();
+  const router = useRouter();
+  const pathname = usePathname();
   const inList = has(slug);
+
+  function handleListClick() {
+    if (!ready) return;
+    if (!user) {
+      const next = encodeURIComponent(pathname || `/title/${slug}`);
+      router.push(`/signup?next=${next}&intent=save`);
+      return;
+    }
+    toggle(slug);
+  }
 
   return (
     <div className="flex flex-wrap items-center gap-3">
@@ -20,7 +35,7 @@ export function TitleActions({ slug }: { slug: string }) {
       </Link>
       <button
         type="button"
-        onClick={() => toggle(slug)}
+        onClick={handleListClick}
         aria-pressed={inList}
         className={`inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-[0.94rem] font-semibold transition ${
           inList
@@ -38,7 +53,7 @@ export function TitleActions({ slug }: { slug: string }) {
             <path d="M5 12h14" />
           </svg>
         )}
-        {inList ? "In My List" : "Add to My List"}
+        {!user && ready ? "Sign in to save" : inList ? "In My List" : "Add to My List"}
       </button>
       <button
         type="button"

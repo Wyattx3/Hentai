@@ -4,19 +4,23 @@ import { useMemo, useState } from "react";
 
 const sections: { title: string; items: { q: string; a: string }[] }[] = [
   {
-    title: "Account & billing",
+    title: "Account & ads",
     items: [
       {
-        q: "How do I cancel my subscription?",
-        a: "Account → Cancel renewal. You keep full access until the end of the current billing period.",
+        q: "Is hentaiki really free?",
+        a: "Yes. hentaiki is free for members and supported by short, brand-safe ads. We don\u2019t ask for a card and we don\u2019t bill you.",
       },
       {
-        q: "What payment methods are supported?",
-        a: "Major cards (Visa, Mastercard, Amex), Apple Pay, Google Pay, and PayPal. Region-specific local methods roll out by quarter.",
+        q: "How often will I see ads?",
+        a: "One short pre-roll before each episode and the occasional banner between rows on home. Ads are frequency-capped per session.",
       },
       {
-        q: "Can I change my plan later?",
-        a: "Yes. Go to Account → Manage plan. Upgrades take effect immediately; downgrades apply at the next renewal.",
+        q: "How can I change what ads I see?",
+        a: "Settings › Ads. Turn off ad personalization, switch to brand-safe-only advertisers, or match ad volume to your playback level.",
+      },
+      {
+        q: "Can I delete my account?",
+        a: "Yes — Account → Sign out, then email hello@hentaiki.app to fully delete your record. We confirm within 24 hours.",
       },
     ],
   },
@@ -29,7 +33,7 @@ const sections: { title: string; items: { q: string; a: string }[] }[] = [
       },
       {
         q: "How many devices can I use?",
-        a: "Premium supports up to four concurrent streams and unlimited registered devices. Standard supports two.",
+        a: "Up to four concurrent streams across as many registered devices as you want. We don\u2019t cap which devices you sign in on.",
       },
       {
         q: "Where can I download episodes?",

@@ -2,11 +2,14 @@
 
 import Link from "next/link";
 import { useMyList } from "@/lib/storage";
+import { useAuth } from "@/lib/auth";
 import { titles } from "@/lib/data";
 import { TitleCard } from "@/components/TitleCard";
 
 export default function MyListPage() {
-  const { list, ready } = useMyList();
+  const { list, ready: listReady } = useMyList();
+  const { user, ready: authReady } = useAuth();
+  const ready = listReady && authReady;
   const items = list
     .map((slug) => titles.find((t) => t.slug === slug))
     .filter(Boolean) as typeof titles;
@@ -22,11 +25,13 @@ export default function MyListPage() {
             My List
           </h1>
           <p className="mt-2 text-[1rem] text-[var(--fg-2)]">
-            {ready
-              ? items.length === 0
-                ? "Empty for now. Tap the + on any card to start a list."
-                : `${items.length} ${items.length === 1 ? "title" : "titles"} ready to watch.`
-              : "Loading your list…"}
+            {!ready
+              ? "Loading your list…"
+              : !user
+                ? "Sign in to save titles and sync them across devices."
+                : items.length === 0
+                  ? "Empty for now. Tap the + on any card to start a list."
+                  : `${items.length} ${items.length === 1 ? "title" : "titles"} ready to watch.`}
           </p>
         </div>
         <Link href="/browse" className="btn-ghost text-[0.92rem]">
@@ -34,7 +39,37 @@ export default function MyListPage() {
         </Link>
       </header>
 
-      {items.length === 0 ? (
+      {ready && !user ? (
+        <div className="card hairline grid place-items-center px-6 py-20 text-center">
+          <div className="grid h-14 w-14 place-items-center rounded-full bg-[var(--brand-soft)] text-[var(--brand)]">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+              <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+              <path d="M17 21v-8H7v8" />
+            </svg>
+          </div>
+          <h2 className="mt-4 text-[1.4rem] font-extrabold tracking-tight text-[var(--fg-4)]">
+            Save titles to your list
+          </h2>
+          <p className="mt-2 max-w-[44ch] text-[0.94rem] text-[var(--fg-2)]">
+            Free with ads, no card required. Create an account to bookmark
+            titles, sync progress, and pick up where you left off on any device.
+          </p>
+          <div className="mt-5 flex flex-wrap items-center justify-center gap-2.5">
+            <Link
+              href="/signup?next=%2Fmy-list&intent=save"
+              className="btn-brand text-[0.94rem]"
+            >
+              Create free account
+            </Link>
+            <Link
+              href="/signin?next=%2Fmy-list&intent=save"
+              className="btn-ghost text-[0.94rem]"
+            >
+              I already have one
+            </Link>
+          </div>
+        </div>
+      ) : items.length === 0 && ready ? (
         <div className="card hairline grid place-items-center px-6 py-20 text-center">
           <div className="grid h-14 w-14 place-items-center rounded-full bg-[var(--brand-soft)] text-[var(--brand)]">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden>

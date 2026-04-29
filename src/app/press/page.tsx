@@ -8,11 +8,11 @@ export const metadata = {
 
 const facts = [
   { k: "Founded", v: "2024 · Yangon" },
-  { k: "Members", v: "120,000+ paid · 32 countries" },
+  { k: "Members", v: "120,000+ free · 32 countries" },
   { k: "Catalog", v: "1,400+ titles · 9,200+ episodes" },
   { k: "Studios", v: "42 partner studios across JP, TW, KR, BR" },
   { k: "Languages", v: "Sub: 14 · Dub: 6" },
-  { k: "Plans", v: "Standard ($4) · Premium ($6) · Premium 4K ($9)" },
+  { k: "Pricing", v: "Free · Ad-supported · No card required" },
 ];
 
 const quotes = [
@@ -48,10 +48,11 @@ export default function PressPage() {
           The official line
         </h2>
         <p className="mt-3 text-[1.04rem] leading-relaxed text-[var(--fg-3)]">
-          hentaiki is a curated streaming service for adult animation. We
-          partner with studios to publish licensed work in HD and 4K, with
-          editorial framing in English, Burmese, and Japanese. The service
-          launched in 2024 and is privately held.
+          hentaiki is a free, ad-supported streaming service for adult
+          animation. We partner with studios to publish licensed work in HD,
+          with editorial framing in English, Burmese, and Japanese. Members
+          watch for free, supported by short, brand-safe ads from independent
+          advertisers. The service launched in 2024 and is privately held.
         </p>
       </section>
 

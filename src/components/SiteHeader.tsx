@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { Wordmark } from "./Wordmark";
 import { useMyList } from "@/lib/storage";
+import { useAuth, monogram } from "@/lib/auth";
 
 const nav = [
   { href: "/browse", label: "Browse" },
@@ -21,6 +22,10 @@ export function SiteHeader() {
   const [profileOpen, setProfileOpen] = useState(false);
   const profileRef = useRef<HTMLDivElement>(null);
   const { list } = useMyList();
+  const { user, ready, signOut } = useAuth();
+
+  // Hide global chrome on auth screens — they have their own full-bleed layout.
+  const isAuthRoute = pathname?.startsWith("/signin") || pathname?.startsWith("/signup");
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -44,6 +49,10 @@ export function SiteHeader() {
     if (profileOpen) document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
   }, [profileOpen]);
+
+  if (isAuthRoute) return null;
+
+  const initials = user ? monogram(user.name) : null;
 
   return (
     <header
@@ -124,80 +133,118 @@ export function SiteHeader() {
             <span className="hidden sm:inline">Search</span>
           </Link>
 
-          <Link
-            href="/notifications"
-            aria-label="Notifications"
-            className="relative hidden h-10 w-10 items-center justify-center rounded-full bg-[var(--bg-2)]/70 text-[var(--fg-2)] transition hover:bg-[var(--bg-3)] hover:text-[var(--fg-4)] sm:inline-flex"
-          >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-              <path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
-              <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
-            </svg>
-            <span aria-hidden className="absolute right-2 top-2 h-2 w-2 rounded-full bg-[var(--brand)]" />
-          </Link>
-
-          <Link href="/browse" className="btn-brand hidden text-[0.92rem] sm:inline-flex">
-            Watch now
-          </Link>
-
-          <div ref={profileRef} className="relative">
-            <button
-              type="button"
-              onClick={() => setProfileOpen((v) => !v)}
-              aria-haspopup="menu"
-              aria-expanded={profileOpen}
-              aria-label="Account menu"
-              className="flex h-10 items-center gap-2 rounded-full bg-[var(--bg-2)]/70 pl-1 pr-3 transition hover:bg-[var(--bg-3)]"
+          {ready && user && (
+            <Link
+              href="/notifications"
+              aria-label="Notifications"
+              className="relative hidden h-10 w-10 items-center justify-center rounded-full bg-[var(--bg-2)]/70 text-[var(--fg-2)] transition hover:bg-[var(--bg-3)] hover:text-[var(--fg-4)] sm:inline-flex"
             >
-              <span className="grid h-8 w-8 place-items-center rounded-full bg-gradient-to-br from-[var(--brand)] to-[oklch(0.55_0.18_15)] text-[0.78rem] font-bold text-[oklch(0.18_0.02_30)]">
-                NW
-              </span>
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden className="hidden text-[var(--fg-2)] sm:block">
-                <path d="m6 9 6 6 6-6" />
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                <path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
+                <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
               </svg>
-            </button>
+              <span aria-hidden className="absolute right-2 top-2 h-2 w-2 rounded-full bg-[var(--brand)]" />
+            </Link>
+          )}
 
-            {profileOpen && (
-              <div
-                role="menu"
-                className="absolute right-0 mt-2 w-64 overflow-hidden rounded-2xl border border-[var(--bg-3)] bg-[var(--bg-1)] shadow-2xl shadow-black/50"
+          {ready && !user && (
+            <>
+              <Link
+                href="/signin"
+                className="hidden h-10 items-center rounded-full px-3.5 text-[0.92rem] font-medium text-[var(--fg-2)] transition hover:text-[var(--fg-4)] sm:inline-flex"
               >
-                <div className="flex items-center gap-3 px-4 py-3.5 border-b border-[var(--bg-3)]/70">
-                  <span className="grid h-10 w-10 place-items-center rounded-full bg-gradient-to-br from-[var(--brand)] to-[oklch(0.55_0.18_15)] text-[0.85rem] font-bold text-[oklch(0.18_0.02_30)]">
-                    NW
+                Sign in
+              </Link>
+              <Link
+                href="/signup"
+                className="btn-brand text-[0.92rem]"
+              >
+                <span className="hidden sm:inline">Create free account</span>
+                <span className="sm:hidden">Sign up</span>
+              </Link>
+            </>
+          )}
+
+          {ready && user && (
+            <>
+              <Link href="/browse" className="btn-brand hidden text-[0.92rem] sm:inline-flex">
+                Watch now
+              </Link>
+              <div ref={profileRef} className="relative">
+                <button
+                  type="button"
+                  onClick={() => setProfileOpen((v) => !v)}
+                  aria-haspopup="menu"
+                  aria-expanded={profileOpen}
+                  aria-label="Account menu"
+                  className="flex h-10 items-center gap-2 rounded-full bg-[var(--bg-2)]/70 pl-1 pr-3 transition hover:bg-[var(--bg-3)]"
+                >
+                  <span className="grid h-8 w-8 place-items-center rounded-full bg-gradient-to-br from-[var(--brand)] to-[oklch(0.55_0.18_15)] text-[0.78rem] font-bold text-[oklch(0.18_0.02_30)]">
+                    {initials}
                   </span>
-                  <div className="min-w-0">
-                    <p className="truncate text-[0.92rem] font-semibold text-[var(--fg-4)]">Nay Waratt</p>
-                    <p className="truncate text-[0.78rem] text-[var(--fg-1)]">Premium · 4K + Sub/Dub</p>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden className="hidden text-[var(--fg-2)] sm:block">
+                    <path d="m6 9 6 6 6-6" />
+                  </svg>
+                </button>
+
+                {profileOpen && (
+                  <div
+                    role="menu"
+                    className="absolute right-0 mt-2 w-64 overflow-hidden rounded-2xl border border-[var(--bg-3)] bg-[var(--bg-1)] shadow-2xl shadow-black/50"
+                  >
+                    <div className="flex items-center gap-3 border-b border-[var(--bg-3)]/70 px-4 py-3.5">
+                      <span className="grid h-10 w-10 place-items-center rounded-full bg-gradient-to-br from-[var(--brand)] to-[oklch(0.55_0.18_15)] text-[0.85rem] font-bold text-[oklch(0.18_0.02_30)]">
+                        {initials}
+                      </span>
+                      <div className="min-w-0">
+                        <p className="truncate text-[0.92rem] font-semibold text-[var(--fg-4)]">{user.name}</p>
+                        <p className="truncate text-[0.78rem] text-[var(--fg-1)]">Free · Ad-supported</p>
+                      </div>
+                    </div>
+                    <div className="py-1.5">
+                      {[
+                        { label: "Profile", href: "/account" },
+                        { label: "My List", href: "/my-list" },
+                        { label: "Notifications", href: "/notifications" },
+                        { label: "Settings", href: "/settings" },
+                        { label: "Help center", href: "/help" },
+                      ].map((it) => (
+                        <Link
+                          key={it.label}
+                          href={it.href}
+                          role="menuitem"
+                          className="flex items-center justify-between px-4 py-2 text-[0.9rem] text-[var(--fg-2)] transition hover:bg-[var(--bg-2)] hover:text-[var(--fg-4)]"
+                        >
+                          <span>{it.label}</span>
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden>
+                            <path d="m9 6 6 6-6 6" />
+                          </svg>
+                        </Link>
+                      ))}
+                    </div>
+                    <div className="border-t border-[var(--bg-3)]/70">
+                      <button
+                        type="button"
+                        role="menuitem"
+                        onClick={() => {
+                          signOut();
+                          setProfileOpen(false);
+                        }}
+                        className="flex w-full items-center justify-between px-4 py-2.5 text-left text-[0.9rem] text-[var(--fg-2)] transition hover:bg-[var(--bg-2)] hover:text-[var(--fg-4)]"
+                      >
+                        <span>Sign out</span>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                          <path d="m16 17 5-5-5-5" />
+                          <path d="M21 12H9" />
+                        </svg>
+                      </button>
+                    </div>
                   </div>
-                </div>
-                <div className="py-1.5">
-                  {[
-                    { label: "Profile", href: "/account" },
-                    { label: "My List", href: "/my-list" },
-                    { label: "Notifications", href: "/notifications" },
-                    { label: "Settings", href: "/settings" },
-                    { label: "Help center", href: "/help" },
-                  ].map((it) => (
-                    <Link
-                      key={it.label}
-                      href={it.href}
-                      role="menuitem"
-                      className="flex items-center justify-between px-4 py-2 text-[0.9rem] text-[var(--fg-2)] transition hover:bg-[var(--bg-2)] hover:text-[var(--fg-4)]"
-                    >
-                      <span>{it.label}</span>
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden>
-                        <path d="m9 6 6 6-6 6" />
-                      </svg>
-                    </Link>
-                  ))}
-                </div>
-                <div className="border-t border-[var(--bg-3)]/70 px-4 py-2.5 text-[0.78rem] text-[var(--fg-1)]">
-                  Member since 2024 · v1.2
-                </div>
+                )}
               </div>
-            )}
-          </div>
+            </>
+          )}
         </div>
       </div>
 
@@ -231,6 +278,45 @@ export function SiteHeader() {
                 </Link>
               );
             })}
+            {ready && !user && (
+              <div className="mt-2 flex flex-col gap-2 border-t border-[var(--bg-3)]/70 pt-3">
+                <Link
+                  href="/signin"
+                  className="rounded-xl bg-[var(--bg-2)] px-4 py-3 text-center text-[0.98rem] font-semibold text-[var(--fg-3)]"
+                >
+                  Sign in
+                </Link>
+                <Link
+                  href="/signup"
+                  className="rounded-xl bg-[var(--brand)] px-4 py-3 text-center text-[0.98rem] font-bold text-[oklch(0.2_0.02_30)]"
+                >
+                  Create free account
+                </Link>
+              </div>
+            )}
+            {ready && user && (
+              <div className="mt-2 flex items-center justify-between border-t border-[var(--bg-3)]/70 pt-3">
+                <Link
+                  href="/account"
+                  className="flex flex-1 items-center gap-3 rounded-xl px-3 py-2.5 hover:bg-[var(--bg-2)]"
+                >
+                  <span className="grid h-9 w-9 place-items-center rounded-full bg-gradient-to-br from-[var(--brand)] to-[oklch(0.55_0.18_15)] text-[0.78rem] font-bold text-[oklch(0.18_0.02_30)]">
+                    {initials}
+                  </span>
+                  <span>
+                    <p className="text-[0.92rem] font-semibold text-[var(--fg-4)]">{user.name}</p>
+                    <p className="text-[0.76rem] text-[var(--fg-1)]">Free · Ad-supported</p>
+                  </span>
+                </Link>
+                <button
+                  type="button"
+                  onClick={() => signOut()}
+                  className="rounded-xl px-3 py-2 text-[0.86rem] font-medium text-[var(--fg-2)] hover:bg-[var(--bg-2)] hover:text-[var(--fg-4)]"
+                >
+                  Sign out
+                </button>
+              </div>
+            )}
           </div>
         </nav>
       )}

@@ -4,6 +4,8 @@ import { Hero } from "@/components/Hero";
 import { Row } from "@/components/Row";
 import { ContinueRow } from "@/components/ContinueRow";
 import { Top10Row } from "@/components/Top10Row";
+import { AdSlot } from "@/components/AdSlot";
+import { HomeJoinCta } from "@/components/HomeJoinCta";
 
 const studios = [
   "Atelier Kurai",
@@ -57,6 +59,10 @@ export default function HomePage() {
 
         <Top10Row titles={ranking} />
 
+        <div className="mx-auto max-w-[1500px] px-4 sm:px-6 lg:px-8">
+          <AdSlot slot="home-mid-1" variant="banner" />
+        </div>
+
         <Row
           heading="New Releases"
           subheading="Fresh this week, simulcast same-day"
@@ -68,6 +74,11 @@ export default function HomePage() {
           titles={[...popular, ...trending].slice(0, 8)}
           href="/collections#popular-this-week"
         />
+
+        <div className="mx-auto max-w-[1500px] px-4 sm:px-6 lg:px-8">
+          <AdSlot slot="home-mid-2" variant="banner" />
+        </div>
+
         <Row
           heading="Studio Spotlight"
           subheading="Atelier Kurai, in focus"
@@ -102,38 +113,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="mx-auto mt-20 max-w-[1500px] px-4 sm:px-6 lg:px-8">
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[var(--brand)] via-[oklch(0.62_0.18_30)] to-[oklch(0.42_0.13_330)] p-10 sm:p-14">
-          <div className="relative z-10 max-w-xl">
-            <p className="text-[0.78rem] font-bold uppercase tracking-[0.22em] text-[oklch(0.20_0.02_30)]/85">
-              Free this month
-            </p>
-            <h2 className="mt-3 text-[clamp(1.8rem,1.3rem+2vw,3rem)] font-extrabold leading-tight tracking-tight text-[oklch(0.20_0.02_30)]">
-              Two episodes free. Then six dollars a month, no ads.
-            </h2>
-            <p className="mt-3 text-[1rem] text-[oklch(0.20_0.02_30)]/85">
-              Join hentaiki and unlock every series in HD, on every device. Cancel any month.
-            </p>
-            <div className="mt-6 flex flex-wrap gap-3">
-              <Link
-                href="/browse"
-                className="rounded-full bg-[oklch(0.18_0.02_30)] px-5 py-3 text-[0.96rem] font-bold text-[var(--fg-4)] transition hover:bg-[oklch(0.12_0.02_30)]"
-              >
-                Start watching
-              </Link>
-              <Link
-                href="/about"
-                className="rounded-full bg-white/15 px-5 py-3 text-[0.96rem] font-bold text-[oklch(0.20_0.02_30)] transition hover:bg-white/25"
-              >
-                What you get
-              </Link>
-            </div>
-          </div>
-          <div aria-hidden className="absolute -right-16 -top-16 h-72 w-72 rounded-full bg-white/15 blur-3xl" />
-          <div aria-hidden className="absolute -bottom-20 right-1/4 h-72 w-72 rounded-full bg-[oklch(0.45_0.20_330)]/40 blur-3xl" />
-        </div>
-      </section>
+      <HomeJoinCta />
 
       <div className="h-20" />
     </>

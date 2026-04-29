@@ -15,6 +15,9 @@ type Settings = {
   emailNotifs: boolean;
   pushNotifs: boolean;
   releaseDigest: "daily" | "weekly" | "off";
+  adPersonalization: boolean;
+  adVolumeMatch: boolean;
+  adCategories: "broad" | "limited";
 };
 
 const defaults: Settings = {
@@ -28,6 +31,9 @@ const defaults: Settings = {
   emailNotifs: true,
   pushNotifs: false,
   releaseDigest: "weekly",
+  adPersonalization: true,
+  adVolumeMatch: true,
+  adCategories: "broad",
 };
 
 export function SettingsClient() {
@@ -95,6 +101,27 @@ export function SettingsClient() {
           <Toggle on={s.matureFilter} onChange={(v) => update("matureFilter", v)} />
         </Row>
       </Group>
+
+      <section id="ads">
+        <Group title="Ads" desc="hentaiki is free, supported by short, brand-safe ads. Tune what you'd like to see.">
+          <Row label="Personalize ads" hint="Use rough country and device only — never your watch history.">
+            <Toggle on={s.adPersonalization} onChange={(v) => update("adPersonalization", v)} />
+          </Row>
+          <Row label="Match ad volume to playback" hint="Keeps loud ads from blowing past your audio.">
+            <Toggle on={s.adVolumeMatch} onChange={(v) => update("adVolumeMatch", v)} />
+          </Row>
+          <Row label="Ad categories">
+            <Segmented
+              value={s.adCategories}
+              options={[
+                { value: "broad", label: "All advertisers" },
+                { value: "limited", label: "Limit to brand-safe only" },
+              ]}
+              onChange={(v) => update("adCategories", v as Settings["adCategories"])}
+            />
+          </Row>
+        </Group>
+      </section>
 
       <Group title="Notifications" desc="We'll only ever send what you ask for.">
         <Row label="Email me new episodes">

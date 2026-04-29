@@ -22,6 +22,9 @@ export function Player({
   const [playing, setPlaying] = useState(false);
   const [pct, setPct] = useState(0);
   const [muted, setMuted] = useState(false);
+  const [adPhase, setAdPhase] = useState<"none" | "playing" | "done">("none");
+  const [adRemaining, setAdRemaining] = useState(15);
+  const adCanSkip = adRemaining <= 10;
   const [showSettings, setShowSettings] = useState(false);
   const [quality, setQuality] = useState("1080p");
   const [speed, setSpeed] = useState(1);
@@ -53,7 +56,29 @@ export function Player({
   useEffect(() => {
     setPct(0);
     setPlaying(false);
+    setAdPhase("none");
+    setAdRemaining(15);
   }, [episode]);
+
+  // Pre-roll ad ticker — counts down then auto-resumes playback
+  useEffect(() => {
+    if (adPhase !== "playing") return;
+    const t = setInterval(() => {
+      setAdRemaining((r) => {
+        if (r <= 1) {
+          clearInterval(t);
+          setAdPhase("done");
+          setPlaying(true);
+          return 0;
+        }
+        return r - 1;
+      });
+    }, 1000);
+    return () => clearInterval(t);
+  }, [adPhase]);
+
+  // Deterministic mock ad creative for this episode
+  const adCreative = pickAd(`${title.slug}-${current.number}`);
 
   // Outside click for settings
   useEffect(() => {
@@ -109,10 +134,10 @@ export function Player({
       </div>
 
       {/* Center play button (only when not started) */}
-      {!playing && pct === 0 && (
+      {!playing && pct === 0 && adPhase === "none" && (
         <button
           type="button"
-          onClick={() => setPlaying(true)}
+          onClick={() => setAdPhase("playing")}
           aria-label="Play episode"
           className="absolute left-1/2 top-1/2 flex h-20 w-20 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-[var(--brand)] text-[oklch(0.18_0.02_30)] shadow-2xl shadow-black/60 transition hover:scale-105 hover:bg-[var(--brand-hot)]"
         >
@@ -120,6 +145,83 @@ export function Player({
             <path d="M8 5v14l11-7z" />
           </svg>
         </button>
+      )}
+
+      {/* Pre-roll ad overlay */}
+      {adPhase === "playing" && (
+        <div
+          className="absolute inset-0 z-30 flex flex-col"
+          aria-label="Sponsored pre-roll"
+          style={{
+            background: `radial-gradient(circle at 30% 25%, ${adCreative.accent}, oklch(0.10 0.03 30) 65%)`,
+          }}
+        >
+          <div className="flex items-center justify-between gap-3 px-5 py-4 text-white">
+            <div className="flex items-center gap-2.5">
+              <span className="inline-flex h-6 items-center rounded-full bg-black/40 px-2.5 text-[0.7rem] font-bold uppercase tracking-[0.16em]">
+                Ad
+              </span>
+              <span className="text-[0.78rem] font-semibold uppercase tracking-[0.16em] text-white/80">
+                {adCreative.brand}
+              </span>
+            </div>
+            <div className="text-[0.78rem] font-mono text-white/85 tabular-nums">
+              {adCanSkip
+                ? `Skipping available now`
+                : `Ad ends in ${adRemaining}s · Skip in ${adRemaining - 10}s`}
+            </div>
+          </div>
+          <div className="flex flex-1 items-center justify-center px-6 sm:px-12">
+            <div className="max-w-2xl text-center">
+              <p
+                className="text-[0.78rem] font-bold uppercase tracking-[0.22em]"
+                style={{ color: adCreative.accent }}
+              >
+                {adCreative.brand}
+              </p>
+              <h3 className="mt-3 text-[clamp(1.6rem,1.1rem+2vw,2.6rem)] font-extrabold leading-tight tracking-tight text-white">
+                {adCreative.headline}
+              </h3>
+              <p className="mx-auto mt-3 max-w-md text-[0.94rem] text-white/80">
+                {adCreative.body}
+              </p>
+              <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+                <a
+                  href={adCreative.href}
+                  target="_blank"
+                  rel="noopener noreferrer sponsored"
+                  className="rounded-full px-5 py-3 text-[0.94rem] font-bold transition"
+                  style={{ background: adCreative.accent, color: "oklch(0.18 0.02 30)" }}
+                >
+                  {adCreative.cta}
+                </a>
+                <button
+                  type="button"
+                  disabled={!adCanSkip}
+                  onClick={() => {
+                    setAdPhase("done");
+                    setPlaying(true);
+                    setAdRemaining(0);
+                  }}
+                  className="rounded-full bg-white/10 px-5 py-3 text-[0.94rem] font-semibold text-white transition hover:bg-white/20 disabled:opacity-50 disabled:hover:bg-white/10"
+                >
+                  {adCanSkip ? `Skip ad ›` : `Skip in ${adRemaining - 10}s`}
+                </button>
+              </div>
+            </div>
+          </div>
+          <div className="px-5 pb-5">
+            <div className="h-[3px] overflow-hidden rounded-full bg-white/15">
+              <div
+                className="h-full rounded-full transition-all duration-1000 ease-linear"
+                style={{
+                  background: adCreative.accent,
+                  width: `${((15 - adRemaining) / 15) * 100}%`,
+                }}
+              />
+            </div>
+          </div>
+        </div>
       )}
 
       {/* Skip intro chip */}
@@ -348,4 +450,54 @@ function fmtTime(sec: number) {
   const mm = String(Math.floor(sec / 60)).padStart(2, "0");
   const ss = String(sec % 60).padStart(2, "0");
   return `${mm}:${ss}`;
+}
+
+type PreRollAd = {
+  brand: string;
+  headline: string;
+  body: string;
+  cta: string;
+  href: string;
+  accent: string;
+};
+
+const PREROLL_ADS: PreRollAd[] = [
+  {
+    brand: "Volume One Manga",
+    headline: "Three free volumes for new members.",
+    body: "Same-day digital release on every Volume One title — manga, doujin, and original light novels.",
+    cta: "Claim three free",
+    href: "https://example.com/volume-one",
+    accent: "oklch(0.74 0.20 332)",
+  },
+  {
+    brand: "Nakamura Foods",
+    headline: "Late-night ramen, in 25 minutes flat.",
+    body: "Fresh tonkotsu, miso, and shoyu — delivered for less than a coffee. Free first delivery.",
+    cta: "Order tonight",
+    href: "https://example.com/nakamura",
+    accent: "oklch(0.76 0.18 28)",
+  },
+  {
+    brand: "Hi-Fi Tokyo",
+    headline: "Speakers tuned for streaming nights.",
+    body: "Compact bookshelf monitors, 60-day return, free expedited shipping for hentaiki members.",
+    cta: "Listen at home",
+    href: "https://example.com/hifi-tokyo",
+    accent: "oklch(0.72 0.16 220)",
+  },
+  {
+    brand: "Kazoku Matcha",
+    headline: "Stone-milled matcha, shipped weekly.",
+    body: "Single-origin first-flush from Uji. New subscribers get a ceremonial whisk on the house.",
+    cta: "Try a tin",
+    href: "https://example.com/kazoku",
+    accent: "oklch(0.74 0.16 142)",
+  },
+];
+
+function pickAd(seed: string): PreRollAd {
+  let h = 0;
+  for (let i = 0; i < seed.length; i++) h = (h * 31 + seed.charCodeAt(i)) | 0;
+  return PREROLL_ADS[Math.abs(h) % PREROLL_ADS.length];
 }

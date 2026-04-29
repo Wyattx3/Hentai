@@ -29,7 +29,7 @@ export function AgeGate() {
       <div className="relative w-full max-w-[520px] overflow-hidden rounded-t-2xl bg-[var(--bg-1)] hairline sm:rounded-2xl">
         <div className="px-7 pt-7">
           <p className="text-[0.78rem] font-semibold uppercase tracking-[0.18em] text-[var(--brand)]">
-            Members only · 18+
+            Free, ad-supported · 18+
           </p>
           <h2
             id="age-gate-title"

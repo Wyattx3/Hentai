@@ -1,7 +1,14 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Wordmark } from "./Wordmark";
 
 export function SiteFooter() {
+  const pathname = usePathname();
+  if (pathname?.startsWith("/signin") || pathname?.startsWith("/signup")) {
+    return null;
+  }
   return (
     <footer className="mt-24 border-t border-[var(--bg-3)] bg-[var(--bg-1)]">
       <div className="mx-auto max-w-[1400px] px-5 py-14 sm:px-8">
@@ -10,7 +17,7 @@ export function SiteFooter() {
             <Wordmark size={22} />
             <p className="mt-4 text-[0.95rem] leading-relaxed text-[var(--fg-2)]">
               Adult animation streaming in HD. New episodes every week, simulcast
-              titles same-day, full back-catalog. Members only, eighteen and over.
+              titles same-day, full back-catalog. Free with ads, eighteen and over.
             </p>
           </div>
           <FooterCol
@@ -41,7 +48,7 @@ export function SiteFooter() {
           />
         </div>
         <div className="mt-12 flex flex-wrap items-center justify-between gap-3 border-t border-[var(--bg-3)] pt-6 text-[0.82rem] text-[var(--fg-1)]">
-          <span>© {new Date().getFullYear()} hentaiki, inc. R18+ for verified members.</span>
+          <span>© {new Date().getFullYear()} hentaiki, inc. R18+ · Free with ads.</span>
           <span>Built with care. No third-party trackers.</span>
         </div>
       </div>

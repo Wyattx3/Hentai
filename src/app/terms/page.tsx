@@ -31,11 +31,12 @@ export default function TermsPage() {
           .
         </Clause>
 
-        <Clause num="03" title="Membership and billing">
-          Subscriptions auto-renew until cancelled. You can cancel any time from
-          Account; access continues to the end of the paid period. Refunds for
-          partial periods aren&apos;t standard, but if you got billed by mistake
-          or had a bad time, write to us — we&apos;re reasonable.
+        <Clause num="03" title="Free, ad-supported access">
+          hentaiki is free for members. We don&apos;t ask for a card and we
+          don&apos;t bill you. Playback is supported by short ads from
+          independent advertisers. Ads are brand-safe, frequency-capped, and
+          never share your watch history with the advertiser. You can manage ad
+          preferences in Settings at any time.
         </Clause>
 
         <Clause num="04" title="Acceptable use">
@@ -59,9 +60,10 @@ export default function TermsPage() {
 
         <Clause num="07" title="Liability">
           We do our best to keep the service running, but we don&apos;t promise
-          zero downtime. Our liability is limited to the amount you&apos;ve paid
-          us in the past twelve months. Some regions don&apos;t allow this kind
-          of limitation; in those regions, we abide by local rules.
+          zero downtime. Because hentaiki is provided free of charge, our
+          liability is limited to the maximum extent permitted by law. Some
+          regions don&apos;t allow this kind of limitation; in those regions,
+          we abide by local rules.
         </Clause>
 
         <Clause num="08" title="Changes to these terms">

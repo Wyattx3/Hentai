@@ -17,9 +17,9 @@ export default function AboutPage() {
           Adult animation, streamed in HD.
         </h1>
         <p className="mt-5 max-w-[64ch] text-[1.1rem] leading-relaxed text-[var(--fg-2)]">
-          hentaiki is a streaming home for adult animation. Sub and dub, full series,
-          new episodes every Friday, simulcast titles same-day. Members only, eighteen
-          and over.
+          hentaiki is a free, ad-supported streaming home for adult animation.
+          Sub and dub, full series, new episodes every Friday, simulcast titles
+          same-day. Eighteen and over, no card required.
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Link href="/browse" className="btn-brand text-[0.98rem]">Start watching</Link>
@@ -38,8 +38,8 @@ export default function AboutPage() {
             body: "New episodes from partner studios stream the day they air, not weeks later. Subbed first, dubbed within the week.",
           },
           {
-            head: "No ads, ever",
-            body: "Membership is six dollars a month. The product is the catalog, not your attention. Cancel any month.",
+            head: "Free, ad-supported",
+            body: "hentaiki is free for members. Short, brand-safe ads keep the lights on. No card, no subscription, no upsell.",
           },
         ].map((c) => (
           <div key={c.head} className="card hairline p-6">
@@ -79,8 +79,9 @@ export default function AboutPage() {
             verifier-of-record at signup. No ID copies are stored.
           </li>
           <li>
-            We do not sell, rent, or barter watch history. We do not run third-party ad
-            scripts. Telemetry is product-only and anonymized.
+            We do not sell, rent, or barter watch history with advertisers.
+            Ads are matched on rough country and device only — never on what
+            you watched. Telemetry is product-only and anonymized.
           </li>
           <li>
             Takedowns and rights questions: legal@hentaiki.app. We answer within five

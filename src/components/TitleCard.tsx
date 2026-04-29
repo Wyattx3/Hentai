@@ -1,10 +1,12 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import type { Title } from "@/lib/data";
 import { Cover } from "./Cover";
 import { Stars } from "./Stars";
 import { useMyList } from "@/lib/storage";
+import { useAuth } from "@/lib/auth";
 
 export function TitleCard({
   title,
@@ -25,7 +27,20 @@ export function TitleCard({
         : "w-[200px] sm:w-[220px]";
 
   const { has, toggle } = useMyList();
+  const { user, ready } = useAuth();
+  const router = useRouter();
   const inList = has(title.slug);
+
+  function handleListToggle(e: React.MouseEvent) {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!ready) return;
+    if (!user) {
+      router.push(`/signup?next=${encodeURIComponent(`/title/${title.slug}`)}&intent=save`);
+      return;
+    }
+    toggle(title.slug);
+  }
 
   return (
     <div className={`group/card relative ${widthClass} shrink-0`}>
@@ -109,11 +124,14 @@ export function TitleCard({
               </Link>
               <button
                 type="button"
-                onClick={(e) => {
-                  e.preventDefault();
-                  toggle(title.slug);
-                }}
-                aria-label={inList ? "Remove from My List" : "Add to My List"}
+                onClick={handleListToggle}
+                aria-label={
+                  !user && ready
+                    ? "Sign in to add to My List"
+                    : inList
+                      ? "Remove from My List"
+                      : "Add to My List"
+                }
                 aria-pressed={inList}
                 className={`flex h-9 w-9 items-center justify-center rounded-full transition ${
                   inList

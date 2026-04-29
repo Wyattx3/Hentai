@@ -7,18 +7,23 @@ import {
   useContinueWatching,
   seedContinueWatchingIfEmpty,
 } from "@/lib/storage";
+import { useAuth } from "@/lib/auth";
 import { titles, getTitle } from "@/lib/data";
 
 export function ContinueRow() {
   const { records, remove } = useContinueWatching();
+  const { user, ready } = useAuth();
   const ref = useRef<HTMLDivElement>(null);
 
-  // seed first-time visitors so the row isn't empty
+  // Only signed-in members get a personal Continue Watching row.
+  // We seed the first time they have an account but no records yet.
   useEffect(() => {
-    seedContinueWatchingIfEmpty(titles.slice(0, 5).map((t) => t.slug));
-  }, []);
+    if (ready && user) {
+      seedContinueWatchingIfEmpty(titles.slice(0, 5).map((t) => t.slug));
+    }
+  }, [ready, user]);
 
-  if (records.length === 0) return null;
+  if (!ready || !user || records.length === 0) return null;
 
   function scrollBy(dir: -1 | 1) {
     const el = ref.current;

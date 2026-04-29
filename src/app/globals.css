@@ -129,6 +129,25 @@ html, body {
 }
 .btn-ghost:hover { background: oklch(1 0 0 / 0.10); }
 
+/* Auth form input */
+.auth-input {
+  width: 100%;
+  background: var(--bg-2);
+  color: var(--fg-4);
+  padding: 0.78rem 0.95rem;
+  border-radius: 12px;
+  font-size: 0.96rem;
+  box-shadow: inset 0 0 0 1px var(--bg-3);
+  transition: box-shadow 180ms var(--ease-out), background 180ms var(--ease-out);
+}
+.auth-input::placeholder { color: var(--fg-1); }
+.auth-input:hover { background: var(--bg-3); }
+.auth-input:focus {
+  outline: none;
+  background: var(--bg-2);
+  box-shadow: inset 0 0 0 1.5px var(--brand);
+}
+
 /* Pill — used for tags, dub/sub badges */
 .pill {
   display: inline-flex;

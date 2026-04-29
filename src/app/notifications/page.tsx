@@ -71,10 +71,10 @@ function buildFeed(): Item[] {
     },
     {
       kind: "system",
-      title: "Payment receipt · April 2026",
-      body: "$6.00 was charged to your card ending in •••• 4242. Thanks for staying with us.",
+      title: "Ad preferences updated",
+      body: "We rolled out a new \u201cBrand-safe only\u201d advertiser tier. Toggle it from Settings \u203a Ads.",
       when: "Apr 14",
-      href: "/account",
+      href: "/settings#ads",
     },
   ];
 }
